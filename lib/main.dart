@@ -1,9 +1,8 @@
-import 'package:amplify_auth/screens/signup_page.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_core/amplify_core.dart';
 import 'package:flutter/material.dart';
 import 'package:amplify_auth/amplifyconfiguration.dart';
-import 'package:amplify_auth/screens/login_screen.dart';
+import 'package:amplify_auth/pages/login_page.dart';
 
 void main() {
   runApp(
@@ -30,8 +29,6 @@ class _AmplifyTODOState extends State<AmplifyTODO> {
     try {
       final auth = AmplifyAuthCognito();
       await Amplify.addPlugin(auth);
-
-      // call Amplify.configure to use the initialized categories in your app
       await Amplify.configure(amplifyconfig);
     } on Exception catch (e) {
       safePrint('An error occurred configuring Amplify: $e');
@@ -48,7 +45,7 @@ class _AmplifyTODOState extends State<AmplifyTODO> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: SignupPage(),
+      home: LogInPage(),
     );
   }
 }

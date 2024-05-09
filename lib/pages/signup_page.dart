@@ -1,26 +1,27 @@
 import 'package:amplify_auth/components/my_button.dart';
 import 'package:amplify_auth/components/my_textfield.dart';
+import 'package:amplify_auth/pages/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
-import 'package:amplify_auth/screens/login_page.dart';
-import 'package:amplify_auth/screens/confirmation_page.dart';
 
 class SignupPage extends StatelessWidget {
   final emailController = TextEditingController();
+  final usernameController = TextEditingController();
   final passwordController = TextEditingController();
-
+  final codeController = TextEditingController();
   SignupPage({super.key});
 
   Future<void> _signUpUser(BuildContext context) async {
     final email = emailController.text;
+    final username = usernameController.text;
     final password = passwordController.text;
     try {
       final userAttributes = {
         AuthUserAttributeKey.email: email,
       };
       final result = await Amplify.Auth.signUp(
-          username: email,
+          username: username,
           password: password,
           options: SignUpOptions(userAttributes: userAttributes));
       await _handleSignUpResult(context, result);
@@ -35,8 +36,27 @@ class SignupPage extends StatelessWidget {
       case AuthSignUpStep.confirmSignUp:
         final codeDeliveryDetails = result.nextStep.codeDeliveryDetails!;
         _handleCodeDelivery(codeDeliveryDetails);
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => ConfirmationPage()));
+        // Navigator.push(context,
+        //     MaterialPageRoute(builder: (context) => ConfirmationPage()));
+        // show dialogBox
+        showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Text("Please enter your confirmation code: "),
+                content: TextField(
+                  controller: codeController,
+                  decoration: InputDecoration(hintText: "Confirmation code"),
+                ),
+                actions: [
+                  TextButton(
+                      onPressed: () => confirmUser(context,
+                          username: usernameController.text,
+                          confirmationCode: codeController.text),
+                      child: Text("Confirm"))
+                ],
+              );
+            });
         break;
       case AuthSignUpStep.done:
         safePrint('Sign up is complete');
@@ -77,9 +97,8 @@ class SignupPage extends StatelessWidget {
         title: Text("Sign Up"),
       ),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const SizedBox(
+          SizedBox(
             height: 50,
           ),
           // logo
@@ -104,6 +123,13 @@ class SignupPage extends StatelessWidget {
           SizedBox(
             height: 10,
           ),
+          MyTextField(
+              controller: usernameController,
+              hintText: "Username",
+              obscurText: false),
+          SizedBox(
+            height: 10,
+          ),
           // password text field
           MyTextField(
             controller: passwordController,
@@ -115,6 +141,7 @@ class SignupPage extends StatelessWidget {
           ),
           //sign up button
           MyButton(
+            text: "SIGN UP",
             onTap: () => _signUpUser(context),
           ),
           SizedBox(
@@ -127,10 +154,16 @@ class SignupPage extends StatelessWidget {
               const SizedBox(
                 width: 4,
               ),
-              Text(
-                "Sign in",
-                style:
-                    TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => LogInPage()));
+                },
+                child: Text(
+                  "Sign in",
+                  style: TextStyle(
+                      color: Colors.blue, fontWeight: FontWeight.bold),
+                ),
               )
             ],
           )
