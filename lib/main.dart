@@ -5,26 +5,25 @@ import 'package:amplify_auth/amplifyconfiguration.dart';
 import 'package:amplify_auth/pages/login_page.dart';
 
 void main() {
-  runApp(
-    MaterialApp(
-      title: 'Amplify TODO',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: AmplifyTODO(),
-    ),
-  );
+  runApp(const MyApp());
 }
 
-class AmplifyTODO extends StatefulWidget {
-  AmplifyTODO({super.key});
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
 
   @override
-  _AmplifyTODOState createState() => _AmplifyTODOState();
+  State<MyApp> createState() => _MyAppState();
 }
 
-class _AmplifyTODOState extends State<AmplifyTODO> {
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    WidgetsFlutterBinding.ensureInitialized();
+    super.initState();
+    _configureAmplify();
+  }
+
   void _configureAmplify() async {
     try {
       final auth = AmplifyAuthCognito();
@@ -36,15 +35,8 @@ class _AmplifyTODOState extends State<AmplifyTODO> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    _configureAmplify();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
       home: LogInPage(),
     );
   }
