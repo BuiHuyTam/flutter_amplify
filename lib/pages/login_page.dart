@@ -51,6 +51,7 @@ class LogInPage extends StatelessWidget {
           const Icon(
             Icons.lock,
             size: 100,
+            color: Colors.grey,
           ),
           // Welcome text
           Text(

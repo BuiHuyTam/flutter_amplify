@@ -21,7 +21,7 @@ class SignupPage extends StatelessWidget {
         AuthUserAttributeKey.email: email,
       };
       final result = await Amplify.Auth.signUp(
-          username: username,
+          username: email,
           password: password,
           options: SignUpOptions(userAttributes: userAttributes));
       await _handleSignUpResult(context, result);
@@ -36,9 +36,6 @@ class SignupPage extends StatelessWidget {
       case AuthSignUpStep.confirmSignUp:
         final codeDeliveryDetails = result.nextStep.codeDeliveryDetails!;
         _handleCodeDelivery(codeDeliveryDetails);
-        // Navigator.push(context,
-        //     MaterialPageRoute(builder: (context) => ConfirmationPage()));
-        // show dialogBox
         showDialog(
             context: context,
             builder: (context) {
@@ -51,7 +48,7 @@ class SignupPage extends StatelessWidget {
                 actions: [
                   TextButton(
                       onPressed: () => confirmUser(context,
-                          username: usernameController.text,
+                          username: emailController.text,
                           confirmationCode: codeController.text),
                       child: Text("Confirm"))
                 ],
@@ -105,26 +102,27 @@ class SignupPage extends StatelessWidget {
           const Icon(
             Icons.lock,
             size: 100,
+            color: Colors.grey,
           ),
           // Welcome text
           Text(
-            "Welcome back you've been missed",
+            "Welcome!",
             style: TextStyle(color: Colors.grey[700]),
           ),
-          SizedBox(
-            height: 25,
-          ),
-          // username text field
-          MyTextField(
-            controller: emailController,
-            hintText: "Email",
-            obscurText: false,
-          ),
+          // SizedBox(
+          //   height: 25,
+          // ),
+          // // username text field
+          // MyTextField(
+          //   controller: emailController,
+          //   hintText: "Email",
+          //   obscurText: false,
+          // ),
           SizedBox(
             height: 10,
           ),
           MyTextField(
-              controller: usernameController,
+              controller: emailController,
               hintText: "Username",
               obscurText: false),
           SizedBox(
@@ -150,7 +148,7 @@ class SignupPage extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text("Already have account? "),
+              Text("Already have an account? "),
               const SizedBox(
                 width: 4,
               ),
