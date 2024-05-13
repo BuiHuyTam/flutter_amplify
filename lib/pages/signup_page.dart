@@ -14,7 +14,7 @@ class SignupPage extends StatelessWidget {
 
   Future<void> _signUpUser(BuildContext context) async {
     final email = emailController.text;
-    final username = usernameController.text;
+    // final username = usernameController.text;
     final password = passwordController.text;
     try {
       final userAttributes = {
